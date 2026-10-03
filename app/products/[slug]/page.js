@@ -1,13 +1,11 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import { notFound, useParams } from "next/navigation";
 import ProductDetail from "../../../components/ProductDetail";
-import { getProduct, products } from "../../../lib/products";
+import { getProduct } from "../../../lib/products";
 
-export function generateStaticParams() {
-  return products.map((product) => ({ slug: product.slug }));
-}
-
-export default async function ProductPage({ params }) {
-  const { slug } = await params;
+export default function ProductPage() {
+  const { slug } = useParams();
   const product = getProduct(slug);
   if (!product) notFound();
   return <ProductDetail product={product}/>;
