@@ -169,8 +169,8 @@ async function sendConfirmation(order) {
 
 export async function POST(request) {
   try {
-    const { customer, items, total, paymentMethod = "paystack" } = await request.json();
-    if (!customer?.name || !customer?.email || !items?.length || !Number.isFinite(Number(total)) || paymentMethod !== "paystack") return NextResponse.json({ error: "Missing or invalid order details" }, { status: 400 });
+    const { customer, items, total, paymentMethod = "pay_on_delivery" } = await request.json();
+    if (!customer?.name || !customer?.email || !items?.length || !Number.isFinite(Number(total)) || paymentMethod !== "pay_on_delivery") return NextResponse.json({ error: "Missing or invalid order details" }, { status: 400 });
     if (!supabaseAdmin) return NextResponse.json({ error: "The store database is not configured." }, { status: 503 });
     const session = await getServerSession(authOptions);
     const payload = { customer_name: customer.name.trim(), customer_email: customer.email.trim().toLowerCase(), address: customer.address?.trim(), city: customer.city?.trim(), country: customer.country?.trim(), total: Number(total), items, payment_method: paymentMethod, account_email: session?.user?.email?.trim().toLowerCase() || null };

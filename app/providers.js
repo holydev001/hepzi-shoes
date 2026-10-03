@@ -1,3 +1,5 @@
 "use client";
 import { SessionProvider } from "next-auth/react";
-export default function Providers({ children }) { return <SessionProvider>{children}</SessionProvider>; }
+import CartSync from "../components/CartSync";
+
+export default function Providers({ children }) { return <SessionProvider><CartSync/>{children}</SessionProvider>; }

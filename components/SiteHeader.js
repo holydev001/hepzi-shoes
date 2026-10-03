@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 import useCartStore from "../lib/cart";
 import UserIcon from "./UserIcon";
@@ -11,7 +11,7 @@ function AccountControl() {
   const [profile, setProfile] = useState(null);
   useEffect(() => { if (!session) { setProfile(null); return; } fetch("/api/account").then((response) => response.ok ? response.json() : null).then((result) => setProfile(result?.profile || null)).catch(() => setProfile(null)); }, [session]);
   if (status === "loading") return <span className="account-loading">•••</span>;
-  if (!session) return <button className="nav-account" onClick={() => signIn("google", { callbackUrl: "/" })}><UserIcon/> <span>Sign in</span></button>;
+  if (!session) return <Link className="nav-account" href="/login"><UserIcon/> <span>Sign in</span></Link>;
   const firstName = profile?.display_name?.split(" ")[0] || session.user?.name?.split(" ")[0] || "Account";
   const image = profile?.image_url || session.user?.image;
   return <Link href="/account" className="nav-account signed-in">{image ? <img className="avatar avatar-image" src={image} alt=""/> : <span className="avatar"><UserIcon size={16}/></span>}<span>Hi, {firstName}</span></Link>;

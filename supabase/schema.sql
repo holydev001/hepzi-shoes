@@ -8,7 +8,7 @@ create table if not exists public.orders (
   country text not null,
   total numeric(10,2) not null check (total >= 0),
   items jsonb not null,
-  payment_method text not null default 'paystack' check (payment_method in ('paystack', 'pay_on_delivery', 'not_recorded')),
+  payment_method text not null default 'pay_on_delivery' check (payment_method in ('pay_on_delivery', 'not_recorded')),
   account_email text,
   created_at timestamptz not null default now()
 );
@@ -16,6 +16,15 @@ alter table public.orders enable row level security;
 revoke all on public.orders from anon, authenticated;
 grant select, insert, update, delete on public.orders to service_role;
 create index if not exists orders_account_email_created_at_idx on public.orders (account_email, created_at desc);
+
+create table if not exists public.carts (
+  account_email text primary key,
+  items jsonb not null default '[]'::jsonb,
+  updated_at timestamptz not null default now()
+);
+alter table public.carts enable row level security;
+revoke all on public.carts from anon, authenticated;
+grant select, insert, update, delete on public.carts to service_role;
 
 create table if not exists public.profiles (
   email text primary key,
