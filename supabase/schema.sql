@@ -8,6 +8,7 @@ create table if not exists public.orders (
   country text not null,
   total numeric(10,2) not null check (total >= 0),
   items jsonb not null,
+  payment_method text not null default 'paystack' check (payment_method in ('paystack', 'pay_on_delivery', 'not_recorded')),
   account_email text,
   created_at timestamptz not null default now()
 );
