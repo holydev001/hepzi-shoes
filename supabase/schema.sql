@@ -36,3 +36,11 @@ create table if not exists public.profiles (
 alter table public.profiles enable row level security;
 revoke all on public.profiles from anon, authenticated;
 grant select, insert, update, delete on public.profiles to service_role;
+
+create table if not exists public.newsletter_subscribers (
+  email text primary key check (char_length(email) between 3 and 254),
+  subscribed_at timestamptz not null default now()
+);
+alter table public.newsletter_subscribers enable row level security;
+revoke all on public.newsletter_subscribers from anon, authenticated;
+grant select, insert, update, delete on public.newsletter_subscribers to service_role;
